@@ -6,6 +6,11 @@
 </p>
 
 <p>
+  <strong>Course:</strong>
+  <%= @section.course.name %>
+</p>
+
+<p>
   <strong>Number:</strong>
   <%= @section.number %>
 </p>
@@ -13,11 +18,6 @@
 <p>
   <strong>Room:</strong>
   <%= @section.room %>
-</p>
-
-<p>
-  <strong>Course:</strong>
-  <%= @section.course.name %>
 </p>
 
 <%= link_to 'Edit', edit_section_path(@section) %> |

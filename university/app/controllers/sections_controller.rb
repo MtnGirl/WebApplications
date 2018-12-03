@@ -61,6 +61,15 @@ class SectionsController < ApplicationController
     end
   end
 
+  def search
+    @sections = Section.where("semester like ?", "%#{params[:query]}%")
+    if instance_variable_get(:@sections).nil? || instance_variable_get(:@sections).empty? 
+          @sections = Section.where("room like ?", "%#{params[:query]}%")
+    end
+
+    render :index
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_section
@@ -69,6 +78,6 @@ class SectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def section_params
-      params.require(:section).permit(:semester, :number, :room, :course_id)
+      params.require(:section).permit(:semester, :course_id, :number, :room)
     end
 end

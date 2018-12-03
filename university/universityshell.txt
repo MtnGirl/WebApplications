@@ -1,0 +1,14 @@
+/Users/rMBP/CS390P/WebApplications/
+rails new university
+# cd university
+rails generate scaffold Section semester:string number:integer room:string course:references
+rails generate scaffold Course name:string dept:string number:integer creditHr:integer
+rails generate scaffold Student name:string number:integer section:references
+rails generate scaffold Enrollment section:references student:references 
+rails generate migration CreateJoinTableEnrollments students sections
+bundle install
+rails db:migrate
+rails c
+Student.all
+
+
