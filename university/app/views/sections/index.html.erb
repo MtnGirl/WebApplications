@@ -2,13 +2,19 @@
 
 <h1>Sections</h1>
 
+<%= form_tag(search_sections_url, method: "get") do %>
+  <%= label_tag(:query, "Search for:     (Enter Semester Name or Room Name)") %>
+  <%= text_field_tag(:query) %>
+  <%= submit_tag("Search") %>
+<% end %>
+
 <table>
   <thead>
     <tr>
       <th>Semester</th>
+      <th>Course</th>
       <th>Number</th>
       <th>Room</th>
-      <th>Course</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -17,9 +23,9 @@
     <% @sections.each do |section| %>
       <tr>
         <td><%= section.semester %></td>
+        <td><%= section.course.name %></td>
         <td><%= section.number %></td>
         <td><%= section.room %></td>
-        <td><%= section.course %></td>
         <td><%= link_to 'Show', section %></td>
         <td><%= link_to 'Edit', edit_section_path(section) %></td>
         <td><%= link_to 'Destroy', section, method: :delete, data: { confirm: 'Are you sure?' } %></td>
