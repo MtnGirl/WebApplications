@@ -10,12 +10,14 @@
   </head>
 
   <body>
+
     <% if notice %>
         <p class="notice"><%= notice %></p>
     <% end %>
     <% if alert %>
         <p class="alert"><%= alert %></p>
     <% end %>
+
     <table class="nav-bar">
     <tr>
       <th><%= link_to 'Courses', courses_path %></th>
@@ -29,7 +31,7 @@
       <td><%= link_to 'New Section', new_section_path %></td>
     </tr>
     </table>
-   
+
     <% flash.each do |name, msg| %>
         <%= content_tag :div, :id => "flash_#{name}", :class => "my_class" do %>
             <%= msg %>

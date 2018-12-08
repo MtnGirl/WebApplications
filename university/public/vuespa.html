@@ -1,0 +1,199 @@
+<html>
+<head>
+<title>University System SPA in Vue</title>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="Itemlist">
+    <button v-on:click="courses_selected=true, sections_selected=false, students_selected=false, 
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=false, doajax('courses')">courses</button>
+    <button v-on:click="courses_selected=false, sections_selected=true, students_selected=false, 
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=false, doajax('sections')">sections</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=true, 
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=false, doajax('students')">students</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false, 
+                        enrollments_selected=true, courses_detail=false, sections_detail=false,
+                        students_detail=false, doajax('enrollments')">enrollments</button>
+    <br />
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false, 
+                        enrollments_selected=false, courses_detail=true, sections_detail=false,
+                        students_detail=false, doajax('courses')">show more</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false, 
+                        enrollments_selected=false, courses_detail=false, sections_detail=true,
+                        students_detail=false, doajax('sections')">show more</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false, 
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=true, doajax('students')">show more</button> 
+                   
+        <ul>
+          <span v-if="courses_selected">
+            <div v-for="course in courses">
+              <li>{{course.name}}
+              </li>
+            </div>
+          </span>
+          <span v-else-if="sections_selected">
+            <div v-for="section in sections">
+              <li>{{section.number}}
+              </li>
+            </div>
+          </span>
+          <span v-else-if="students_selected">
+            <div v-for="student in students">
+              <li>{{student.name}}
+              </li>
+            </div>
+          </span>
+          <span v-else-if="courses_detail">
+            <div v-for="course in courses">
+              <li>{{course.dept}} {{course.number}} {{course.name}} {{course.creditHr}}</li> 
+            </div>
+          </span>
+          <span v-else-if="sections_detail">
+            <div v-for="section in sections">
+              <li>{{section.number}} 
+                <ul>
+                  <li>Semester: {{section.semester}} <br />
+                      Room: {{section.room}} <br />
+                      Course ID: {{section.course_id}}
+                  </li>
+                </ul>
+              </li>
+            </div>
+          </span>
+          <span v-else-if="students_detail">
+            <div v-for="student in students">
+              <li>{{student.name}}
+                <ul>
+                  <li>Number: {{student.number}}</li>
+                </ul>
+              </li>
+            </div>
+          </span>
+          <span v-else-if="enrollments_selected">
+              <div v-for="enrollment in enrollments">
+                  <div v-for="student in students">
+                      <div v-for="section in sections">
+                          <span v-if="enrollment.student_id === student.id">
+                              <span v-if="enrollment.section_id === section.id">
+                                  <li>Student: {{student.name}}<br />
+                                      Semester: {{section.semester}}
+                                      <div v-for="course in courses">
+                                          <span v-if="section.course_id === course.id">
+                                              Course: {{course.name}}
+                                          </span>
+                                      </div>
+                                          Section: {{section.number}}<br />
+                                          Room: {{section.room}}<br />
+                                  </li>
+                             </span>
+                         </span>
+                     </div>
+                 </div>
+             </div>
+         </span>
+    <ul>
+</div>
+
+<script type="text/javascript">
+var ItemsVue = new Vue({
+    el: '#Itemlist',
+    data: {courses_selected: false,
+        sections_selected: false,
+        students_selected: false,
+        enrollments_selected: false,
+        courses_detail: false,
+        sections_detail: false,
+        students_detail: false,
+        courses: [],
+        sections: [],
+        students: [],
+        enrollments: []
+    },
+    methods: {
+        // use jquery
+        doajax: function(which) {
+            var nxtdata = '';
+            $.ajax({
+                url: 'http://localhost:3000/' + which + '.json',
+                method: 'GET',
+                // use => so the this is not set
+                success: (data) => {
+                    nxtdata = data;
+                    this.which = data;
+                    console.log(which);
+		            if (which === "courses") {
+                       this.courses = data;
+                    } else if (which === "sections") {
+                       this.sections = data;
+                    } else if (which === "students") {
+                       this.students = data;
+                    } else {
+                       this.enrollments = data;
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+                doajaxsections: function() {
+                    $.ajax({
+                        var agndata = nxtdata;
+                        url: 'http://localhost:3000/sections.json',
+                        method: 'GET',
+                        
+                        // use => so the this is not set
+                        success: (nxtdata) => {
+                            this.sections = nxtdata;
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                   });
+                }
+                doajaxstudents: function() {
+                           $.ajax({
+                               url: 'http://localhost:3000/students.json',
+                               method: 'GET',
+                               // use => so the this is not set
+                               success: (data) => {
+                                   this.studentss = data;
+                               },
+                               error: function (error) {
+                                   console.log(error);
+                               }
+                           });
+                }
+                     
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        doajaxstudents: function() {
+            $.ajax({
+                url: 'http://localhost:3000/students.json',
+                method: 'GET',
+                // use => so the this is not set
+                success: (d) => {
+                    this.studentss = d;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    }
+});
+</script>
+
+</body>
+</html>
