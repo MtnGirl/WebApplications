@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+
+  root 'spauniversity#index'
+
   resources :enrollments do
     collection do
       get 'search'

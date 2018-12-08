@@ -1,0 +1,162 @@
+<h1>Welcome!</h1>
+<br>
+<b>Please use the navigation bar to get started or click on the Single Page Application buttons below to see it in action.</b>
+<br><br>
+<i>This web application program was written in Ruby on Rails 5.1 in Dr. Beaty's MSU of Denver's CS390P Web Application Architecture class.<br>
+The idea was to create a fully functional website similarly to a Banner application using the Ruby on Rails MVC. This application contains<br>
+many features:</i>
+<ul>
+    <li>Courses, Sections, Students, and Enrollments 
+    <li>A working navigation bar
+    <li>Search function for each page
+    <li>A single page application using JQuery
+</ul>
+<hr>
+
+<html>
+<h2>Single Page Application</h2>
+<head>
+<title>A very simple SPA in Vue and Axios</title>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+<div id="Itemlist">
+    <button v-on:click="courses_selected=true, sections_selected=false, students_selected=false,
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=false">courses</button>
+    <button v-on:click="courses_selected=false, sections_selected=true, students_selected=false,
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=false">sections</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=true,
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=false">students</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false,
+                        enrollments_selected=true, courses_detail=false, sections_detail=false,
+                        students_detail=false">enrollments</button>
+    <br />
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false,
+                        enrollments_selected=false, courses_detail=true, sections_detail=false,
+                        students_detail=false">*More *</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false,
+                        enrollments_selected=false, courses_detail=false, sections_detail=true,
+                        students_detail=false">*More *</button>
+    <button v-on:click="courses_selected=false, sections_selected=false, students_selected=false,
+                        enrollments_selected=false, courses_detail=false, sections_detail=false,
+                        students_detail=true">*More *</button>
+
+    <ul>
+
+    <span v-if="courses_selected">
+        <div v-for="course in courses">
+            <li>{{course.name}} {{course.number}}</li>
+        </div>
+     </span>
+     <span v-else-if="sections_selected">
+         <div v-for="section in sections">
+             <li>#{{section.number}}</li>
+         </div>
+     </span>
+     <span v-else-if="students_selected">
+         <div v-for="student in students">
+             <li>{{student.name}}</li>
+         </div>
+     </span>
+     <span v-else-if="enrollments_selected">
+         <div v-for="enrollment in enrollments">
+             <div v-for="student in students">
+                 <div v-for="section in sections">
+                     <span v-if="enrollment.student_id === student.id">
+                         <span v-if="enrollment.section_id === section.id">
+                             <li>Student: {{student.name}}<br />
+                                 Semester: {{section.semester}}
+                                 <div v-for="course in courses">
+                                     <span v-if="section.course_id === course.id">
+                                         Course: {{course.name}}
+                                     </span>
+                                 </div>
+                                 Section: {{section.number}}<br />
+                                 Room: {{section.room}}<br />
+                             </li>
+                         </span>
+                     </span>
+                 </div>
+             </div>
+         </div>
+     </span>
+     <span v-else-if="courses_detail">
+         <div v-for="course in courses">
+             <li>Name: {{course.name}} <br />
+                         Department: {{course.dept}} <br />
+                         Number: {{course.number}} <br />
+                         CreditHr: {{course.creditHr}}
+             </li>
+         </div>
+      </span>
+      <span v-else-if="sections_detail">
+          <div v-for="section in sections">
+              <li>Semester: {{section.semester}}
+                  <div v-for="course in courses">
+                      <span v-if="section.course_id === course.id">
+                          Course: {{course.name}}
+                      </span>
+                  </div>
+                  Section: {{section.number}}<br />
+                  Room: {{section.room}}<br />
+              </li>
+          </div>
+      </span>
+      <span v-else-if="students_detail">
+         <div v-for="student in students">
+             <li>Student: {{student.name}}<br />
+                 Number: {{student.number}}<br />
+                 <div v-for="section in sections">
+                     <div v-for="enrollment in enrollments">
+                         <span v-if="enrollment.student_id === student.id && enrollment.section_id === section.id">
+                             Section: {{section.number}}<br />
+                         </span>
+                     </div>
+                 </div>
+             </li>
+         </div>
+      </span>
+
+    </ul>
+</div>
+
+<script type="text/javascript">
+var ItemsVue = new Vue({
+    el: '#Itemlist',
+    data: {courses_selected: false,
+        sections_selected: false,
+        students_selected: false,
+        enrollments_selected: false,
+        courses_detail: false,
+        sections_detail: false,
+        students_detail: false,
+        courses: [],
+        sections: [],
+        students: [],
+        enrollments: []
+    },
+    mounted: function() {
+        axios.get('http://localhost:3000/courses.json')
+             .then(response => { this.courses = response.data })
+             .catch(error => { console.log(error); });
+        axios.get('http://localhost:3000/sections.json')
+            .then(response => { this.sections = response.data })
+            .catch(error => { console.log(error); });
+        axios.get('http://localhost:3000/students.json')
+            .then(response => { this.students = response.data })
+            .catch(error => { console.log(error); });
+        axios.get('http://localhost:3000/enrollments.json')
+            .then(response => { this.enrollments = response.data })
+            .catch(error => { console.log(error); });
+    }
+});
+</script>
+
+</body>
+</html>
+
