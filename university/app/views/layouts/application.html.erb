@@ -10,6 +10,32 @@
   </head>
 
   <body>
+    <% if notice %>
+        <p class="notice"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+        <p class="alert"><%= alert %></p>
+    <% end %>
+    <table class="nav-bar">
+    <tr>
+      <th><%= link_to 'Courses', courses_path %></th>
+      <th><%= link_to 'Students', students_path %></th>
+      <th><%= link_to 'Sections', sections_path %></th>
+      <th><%= link_to 'Enrollments', enrollments_path %></th>
+    </tr>
+    <tr>
+      <td><%= link_to 'New Course', new_course_path %></td>
+      <td><%= link_to 'New Student', new_student_path %></td>
+      <td><%= link_to 'New Section', new_section_path %></td>
+    </tr>
+    </table>
+   
+    <% flash.each do |name, msg| %>
+        <%= content_tag :div, :id => "flash_#{name}", :class => "my_class" do %>
+            <%= msg %>
+        <% end %>
+    <% end %>    
+
     <%= yield %>
   </body>
 </html>
