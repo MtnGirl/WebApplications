@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
-  root 'spauniversity#index'
+
+  get 'home/index'
+  devise_for :users
+  root to: "home#index"  
 
   resources :enrollments do
     collection do

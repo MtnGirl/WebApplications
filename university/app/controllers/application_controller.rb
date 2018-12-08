@@ -1,8 +1,9 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+    protect_from_forgery with: :exception
+    before_action :authenticate_user!
 
-before_action :cors_preflight_check
- after_action :cors_set_access_control_headers
+    before_action :cors_preflight_check
+    after_action :cors_set_access_control_headers
 
 
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin

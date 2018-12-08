@@ -1,0 +1,18 @@
+<h1>Welcome to the University Web Application</h1>
+<br>
+<b>Please log in and use the navigation bar to get started.</b>
+<br><br>
+<i>This web application program was written in Ruby on Rails 5.1 in Dr. Beaty's MSU of Denver's CS390P Web Application Architecture class.<br>
+The idea was to create a fully functional website similarly to a Banner application using the Ruby on Rails MVC. This application contains<br>
+many features:</i>
+<ul>
+    <li>Courses, Sections, Students, and Enrollments 
+    <li>A working navigation bar
+    <li>Search function for each page
+</ul>
+
+<br>
+
+<%= link_to 'Log out',
+  destroy_user_session_path,
+  method: :delete %>
